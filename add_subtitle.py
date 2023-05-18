@@ -33,6 +33,7 @@ generator = lambda txt: TextClip(txt,
                                  font='WenQuanYi-Micro-Hei',
                                  fontsize=args.font_size,
                                  color='FloralWhite',
+                                 stroke_color='Black',
                                  method='caption',
                                  size=clip.size,
                                  align='South')
