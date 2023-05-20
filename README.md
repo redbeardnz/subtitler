@@ -6,6 +6,10 @@ This repo shows a demo to use AI **ASR** ([whisper](https://github.com/openai/wh
 
 
 # Setup
+## Install Source Code
+- git clone https://github.com/redbeardnz/subtitler.git
+- cd subtitler
+
 ## whisper
 Please follow [whisper setup](https://github.com/openai/whisper#setup)  to setup
 
