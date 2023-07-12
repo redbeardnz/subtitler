@@ -1,0 +1,15 @@
+version: '2.4'
+
+services:
+  subtitler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: subtitler:latest
+    container_name: subtitler
+    restart: "no"
+    volumes:
+      - .:/app:ro
+    ulimits:
+      memlock: -1
+      stack: 67108864

@@ -1,5 +1,6 @@
 FROM python:3.10-slim
 
+ENV TIKTOKEN_CACHE_DIR='/models'
 WORKDIR /app
 
 # install wisper
