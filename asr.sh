@@ -70,7 +70,6 @@ VIDEO_NAME=$(basename ${VIDEO})
 VIDEO_DIR=$(dirname ${VIDEO})
 SRT_FILE=${VIDEO}.srt
 CWD=$(pwd)
-source ${ROOT_DIR}/.env
 
 # make sure srt file exists, to avoid mounting it as dir in docker
 if ! touch ${SRT_FILE}; then
