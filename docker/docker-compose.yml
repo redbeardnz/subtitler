@@ -9,7 +9,7 @@ services:
     container_name: subtitler
     restart: "no"
     volumes:
-      - .:/app:ro
+      - ../src:/app:ro
     ulimits:
       memlock: -1
       stack: 67108864

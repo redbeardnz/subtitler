@@ -97,5 +97,5 @@ if ! touch ${OUTPUT_VIDEO}; then
 fi
 
 cd ${ROOT_DIR}
-docker-compose run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${OUTPUT_VIDEO}:/video/${OUTPUT_VIDEO_NAME} -v ${SRT_FILE}:/subtitle/${SRT_FILE_NAME}:ro subtitler /app/add_subtitle.py ${OPTIONS} -s /subtitle/${SRT_FILE_NAME} -o /output/${OUTPUT_VIDEO_NAME} /video/${VIDEO_NAME}
+docker-compose -f docker/docker-compose.yml run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${OUTPUT_VIDEO}:/video/${OUTPUT_VIDEO_NAME} -v ${SRT_FILE}:/subtitle/${SRT_FILE_NAME}:ro subtitler /app/add_subtitle.py ${OPTIONS} -s /subtitle/${SRT_FILE_NAME} -o /output/${OUTPUT_VIDEO_NAME} /video/${VIDEO_NAME}
 cd ${CWD}
