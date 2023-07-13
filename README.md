@@ -47,6 +47,7 @@ Run `asr.sh -h` to see below usage
 
 ## Add subtitle to video
 When SRT file `{video}.srt` is available, you can run [subtitle.sh](https://github.com/redbeardnz/subtitler/blob/master/subtitle.sh) to add subtitle into video.
+Run `subtitle.sh -h` to see below usage
 
     Usage: subtitle.sh -h   show this help info.
            subtitle.sh [-v] video
