@@ -15,8 +15,8 @@ function show_usage {
     echo "  video        Local file path to video."
     echo
     echo "  output:"
-    echo "  srt          srt file is stored in the same folder as video with a name"
-    echo "               equaling to video's name + .srt suffix."
+    echo "  {video}.srt  Output srt file is saved in the same folder as the input"
+    echo "               video with a name equaling to video's name + .srt suffix."
     echo
     echo "  options:"
     echo "  -m model     Specify whisper asr model to use. The full model list is"
@@ -69,13 +69,14 @@ VIDEO=$(realpath -LP ${1})
 VIDEO_NAME=$(basename ${VIDEO})
 VIDEO_DIR=$(dirname ${VIDEO})
 SRT_FILE=${VIDEO}.srt
+SRT_FILE_NAME=$(basename ${SRT_FILE})
 CWD=$(pwd)
 
-# make sure srt file exists, to avoid mounting it as dir in docker
+# create an empty srt file to be mounted by docker
 if ! touch ${SRT_FILE}; then
     exit 1
 fi
 
 cd ${ROOT_DIR}
-docker-compose run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${SRT_FILE}:/output/${VIDEO_NAME}.srt -v ${MODEL_DIR}:/models subtitler /app/retrieve.py ${VERBOSE} -m ${MODEL} -md /models /video/${VIDEO_NAME} /output
+docker-compose run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${SRT_FILE}:/output/${SRT_FILE_NAME} -v ${MODEL_DIR}:/models subtitler /app/retrieve.py ${VERBOSE} -m ${MODEL} -md /models /video/${VIDEO_NAME} /output
 cd ${CWD}
