@@ -24,7 +24,7 @@ You can convert the speech of a video into text and save it as a subtitle **SRT*
 Run `asr.sh -h` to see below usage
 
     Usage: asr.sh -h   show this help info.
-	       asr.sh [-v] [-m model] [-d model_dir] video
+	       asr.sh [-v] [-m model] [-d model_dir] [-i] video
     asr.sh converts the speech of a video to text.
     The text is saved in a srt file with a suffix '.srt'
     appended to the name of input video
