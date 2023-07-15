@@ -19,6 +19,11 @@ This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to ge
 - sudo rm -rf ~/software/subtitler
 
 # Run
+## demo videos:
+- en.mp4: https://media.gettr.com/group6/getter/2023/07/15/23/5f37125d-5a2a-fadc-3165-1ee49c41422f/out.mp4
+- ja.mp4: https://media.gettr.com/group9/getter/2023/07/15/23/3f3bc970-0745-2651-dd05-a49267b7f326/out.mp4
+- miles.mp4: https://media.gettr.com/group12/getter/2023/07/15/23/0629d5e3-d17a-dfc6-8762-2de00aa4f8f2/out.mp4
+
 ## Retrive subtitle
 You can convert the speech of a video into text and save it as a subtitle **SRT** file by [asr.sh](https://github.com/redbeardnz/subtitler/blob/master/asr.sh).
 Run `asr.sh -h` to see below usage
