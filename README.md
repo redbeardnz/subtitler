@@ -8,8 +8,15 @@ This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to ge
 
 # Setup
 ## Install Source Code
+- mkdir ~/software
+- cd ~/software
 - git clone https://github.com/redbeardnz/subtitler.git
 - cd subtitler
+- mkdir ~/bin
+- ln -s $(pwd)/*.sh ~/bin/
+
+## Uninstall Source Code (it needs your Mac's Password to run rm as root user)
+- sudo rm -rf ~/software/subtitler
 
 # Run
 ## Retrive subtitle
@@ -44,6 +51,12 @@ Run `asr.sh -h` to see below usage
 - `asr.sh -m medium -d my_models -v ~/subtitle/demo.mp4`, generates SRT file using `medium` whisper model downloaded into folder `my_models/`.
 
 > ***HINT***: When you run [asr.sh](https://github.com/redbeardnz/subtitler/blob/master/asr.sh) at the first time, you need connect your computer to the internet to download whisper models. Once models are well downloaded, internet connection is unnecessary any longer.
+
+#### Uninstall AI models
+- sudo rm -rf ~/software/subtitler/models
+
+#### Uninstall Docker image for subtitler
+- docker rmi subtitler:latest
 
 ## Add subtitle to video
 When SRT file `{video}.srt` is available, you can run [subtitle.sh](https://github.com/redbeardnz/subtitler/blob/master/subtitle.sh) to add subtitle into video.
