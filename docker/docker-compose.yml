@@ -10,6 +10,20 @@ services:
     restart: "no"
     volumes:
       - ../src:/app:ro
+    network_mode: none
+    ulimits:
+      memlock: -1
+      stack: 67108864
+
+  subtitler-with-net:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: subtitler:latest
+    container_name: subtitler
+    restart: "no"
+    volumes:
+      - ../src:/app:ro
     ulimits:
       memlock: -1
       stack: 67108864
