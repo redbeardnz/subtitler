@@ -14,6 +14,7 @@ This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to ge
 - cd subtitler
 - mkdir ~/bin
 - ln -s $(pwd)/*.sh ~/bin/
+- echo 'PATH=${PATH}:~/bin' >> ~/.bash_profile
 
 ## Uninstall Source Code (it needs your Mac's Password to run rm as root user)
 - sudo rm -rf ~/software/subtitler
