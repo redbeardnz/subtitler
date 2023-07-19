@@ -5,30 +5,65 @@ ROOT_DIR=$(dirname $(realpath -LP ${0}))
 SCRIPT_NAME=$(basename ${0})
 
 function show_usage {
-    echo "Usage: ${SCRIPT_NAME} -h   show this help info."
-    echo "       ${SCRIPT_NAME} [-v] video"
+    echo "Usage: ${SCRIPT_NAME} [-h] show this help info."
+    echo "       ${SCRIPT_NAME} [-v] video [style options]"
     echo "${SCRIPT_NAME} add subtitle to video. The subtitle text"
     echo "is retrieved from a srt file with a suffix '.srt' appended"
     echo "to the name of input video"
     echo
     echo "  input:"
-    echo "  video          Local file path to video."
+    echo "  video     Local file path to video."
     echo
     echo "  output:"
-    echo "  video          Output video saved in the same folder as input video with a"
-    echo "                 name equaling to video name's stem + .sub + video suffix."
+    echo "  video     Output video saved in the same folder as input video with a"
+    echo "            name equaling to video name's stem + .sub + video suffix."
     echo
     echo "  options:"
-    echo "  -c font_color   Specify font color of subtitle. The full color list is avaiable"
-    echo "                  in github README.md."
-    echo "                  Default to FloralWhite."
-    echo "  -s font_size    Specify font size of subtitle. The valie range from 1 to 100"
-    echo "                  Default to 100."
-    echo "  -t stroke_color Specify stroke color of subtitle. The full color list is avaiable"
-    echo "                  in github README.md."
-    echo "                  Default to black."
-    echo "  -w stroke_width Specify stroke width of subtitle. The valie is float"
-    echo "                  Default to 0.1."
+    echo "  -h        Show this help info."
+    echo "  -v        Show more verbose log."
+    echo
+    echo "  style options:"
+    echo "  -fs, --font_size <size>     Size of font. Default 16."
+    echo "  -fc, --font_color <color>   Color of font. Default white."
+    echo "  -ft, --font_transparency <transparency>"
+    echo "                              Transparency of font (0 ~ 100). Default 0."
+    echo "  -ow, --outline_width <width>"
+    echo "                              Width of font outline, in pixels. Default 1."
+    echo "                              In box border_style, it's the width of box"
+    echo "  -oc, --outline_color <color>"
+    echo "                              Color of font outline. Default black."
+    echo "  -ot, --outline_transparency <transparency>"
+    echo "                              Transparency of font outline. Default 0."
+    echo "  -sd, --shadow_depth <depth> Depth of the font shadow, in pixels. Default 1."
+    echo "  -sc, --shadow_color <color> Color of font shadow. Default black."
+    echo "  -st, --shadow_transparency <transparency>"
+    echo "                              Transparency of font shadow. Default 0."
+    echo "  -bl, --bold                 Enable bold font."
+    echo "  -il, --italic               Enable italic font."
+    echo "  -ul, --underline            Enable font underline."
+    echo "  -so, --strikeout            Enable font strikeout."
+    echo "  -bs, --border_style <border_style>"
+    echo "                              border_style: shadow, box, rectangle. Default shadow."
+    echo "                              shadow: font with shadow."
+    echo "                              box: each subtitle line is embedded in one box."
+    echo "                              rectangle: subtitle lines are embedded in a rectangle."
+    echo "  -al, --alignment <align>    align: 'bottom left', 'bottom center', 'bottom right'"
+    echo "                                     'center left', 'center center', 'center right'"
+    echo "                                     'top left', 'top center', 'top right'"
+    echo "                              Default 'bottom center'"
+    echo "  -ag, --angle <angle>        Angle (float) of the subtitle, in degree. Default 0.0."
+    echo "  -sp, --spacing <spacing>    Extra space (in pixels) between characters. Default 0."
+    echo "  -ml, --margin_left <margin> Margin from subtitle to video left border. Default 0."
+    echo "  -mr, --margin_right <margin>"
+    echo "                              Margin from subtitle to video right border. Default 0."
+    echo "  -mv, --margin_vertical <margin>"
+    echo "                              Margin from subtitle to video top/bottom border."
+    echo "                              Default 0."
+    echo "  -sx, --scalex <scale>       Modifies the width of the font by scale (float)."
+    echo "                              Default 1.0."
+    echo "  -sy, --scaley <scale>       Modifies the height of the font by scale (float)."
+    echo "                              Default 1.0."
+    echo
 }
 
 
@@ -43,26 +78,15 @@ OPTIONS=''
 
 # Reset in case getopts has been used previously in the shell.
 OPTIND=1
-while getopts "hvc:s:t:w:" opt; do
+#while getopts "hvc:s:t:w:" opt; do
+while getopts "hv" opt; do
     case ${opt} in
         h ) # process option h
             show_usage
             exit 0
             ;;
         v ) # process option v
-            OPTIONS="${OPTIONS} -v"
-            ;;
-        c ) # process option c
-            OPTIONS="${OPTIONS} --font_color ${OPTARG}"
-            ;;
-        s ) # process option s
-            OPTIONS="${OPTIONS} --font_size ${OPTARG}"
-            ;;
-        t ) # process option t
-            OPTIONS="${OPTIONS} --stroke_color ${OPTARG}"
-            ;;
-        w ) # process option w
-            OPTIONS="${OPTIONS} --stroke_width ${OPTARG}"
+            OPTIONS="-v"
             ;;
         \? ) # invalid option
             echo
@@ -74,12 +98,15 @@ done
 shift $((OPTIND-1))
 
 VIDEO=$(realpath -LP ${1})
+shift
+OPTIONS="${OPTIONS} ${@}"
+
 VIDEO_NAME=$(basename ${VIDEO})
 VIDEO_NAME_STEM="${VIDEO_NAME%.*}"
 VIDEO_NAME_SUFF="${VIDEO_NAME##*.}"
 VIDEO_DIR=$(dirname ${VIDEO})
-OUTPUT_VIDEO=${VIDEO_DIR}/${VIDEO_NAME_STEM}.sub.${VIDEO_NAME_SUFF}
-OUTPUT_VIDEO_NAME=$(basename ${OUTPUT_VIDEO})
+OUTPUT_VIDEO_NAME=${VIDEO_NAME_STEM}.sub.${VIDEO_NAME_SUFF}
+OUTPUT_VIDEO=${VIDEO_DIR}/${OUTPUT_VIDEO_NAME}
 SRT_FILE=${VIDEO}.srt
 SRT_FILE_NAME=$(basename ${SRT_FILE})
 CWD=$(pwd)
@@ -97,5 +124,5 @@ if ! touch ${OUTPUT_VIDEO}; then
 fi
 
 cd ${ROOT_DIR}
-docker-compose -f docker/docker-compose.yml run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${OUTPUT_VIDEO}:/video/${OUTPUT_VIDEO_NAME} -v ${SRT_FILE}:/subtitle/${SRT_FILE_NAME}:ro subtitler /app/add_subtitle.py ${OPTIONS} -s /subtitle/${SRT_FILE_NAME} -o /output/${OUTPUT_VIDEO_NAME} /video/${VIDEO_NAME}
+docker-compose -f docker/docker-compose.yml run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${OUTPUT_VIDEO}:/video/${OUTPUT_VIDEO_NAME} -v ${SRT_FILE}:/subtitle/${SRT_FILE_NAME}:ro subtitler /app/add_subtitle.py ${OPTIONS} -s /subtitle/${SRT_FILE_NAME} /video/${VIDEO_NAME} /video/${OUTPUT_VIDEO_NAME}
 cd ${CWD}
