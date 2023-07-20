@@ -89,18 +89,18 @@ Run `subtitle.sh -h` to see below usage
     
       style options:
       -fs, --font_size <size>     Size of font. Default 16.
-      -fc, --font_color <color>   Color of font. Default white.
+      -fc, --font_color <color>   RGB Color of font. Default FFFFFF (white).
       -ft, --font_transparency <transparency>
                                   Transparency of font (0 ~ 100). Default 0.
       -ow, --outline_width <width>
                                   Width of font outline, in pixels. Default 1.
                                   In box border_style, it's the width of box
       -oc, --outline_color <color>
-                                  Color of font outline. Default black.
+                                  RGB Color of font outline. Default 000000 (black).
       -ot, --outline_transparency <transparency>
                                   Transparency of font outline. Default 0.
       -sd, --shadow_depth <depth> Depth of the font shadow, in pixels. Default 1.
-      -sc, --shadow_color <color> Color of font shadow. Default black.
+      -sc, --shadow_color <color> RGB Color of font shadow. Default 000000 (black).
       -st, --shadow_transparency <transparency>
                                   Transparency of font shadow. Default 0.
       -bl, --bold                 Enable bold font.
@@ -142,7 +142,7 @@ Videos with subtitle are generated in the same folder as input videos. The name 
 
 # Appendix
 
-1. Available colors are listed in [COLOR_TABLE.md](https://github.com/redbeardnz/subtitler/blob/master/COLOR_TABLE.md)
+1. Available RBG colors can be found at [RGB_Color](https://www.rapidtables.com/web/color/RGB_Color.html)
 
 
 # License
