@@ -70,30 +70,67 @@ Run `asr.sh -h` to see below usage
 When SRT file `{video}.srt` is available, you can run [subtitle.sh](https://github.com/redbeardnz/subtitler/blob/master/subtitle.sh) to add subtitle into video.
 Run `subtitle.sh -h` to see below usage
 
-    Usage: subtitle.sh -h   show this help info.
-           subtitle.sh [-v] video
+    Usage: subtitle.sh [-h] show this help info.
+           subtitle.sh [-v] video [style options]
     subtitle.sh add subtitle to video. The subtitle text
     is retrieved from a srt file with a suffix '.srt' appended
     to the name of input video
     
       input:
-      video          Local file path to video.
+      video     Local file path to video.
     
       output:
-      video          Output video saved in the same folder as input video with a
-                     name equaling to video name's stem + .sub + video suffix.
+      video     Output video saved in the same folder as input video with a
+                name equaling to video name's stem + .sub + video suffix.
     
       options:
-      -c font_color   Specify font color of subtitle. The full color list is avaiable
-                      in README.md.
-                      Default to FloralWhite.
-      -s font_size    Specify font size of subtitle. The valie range from 1 to 100
-                      Default to 100.
-      -t stroke_color Specify stroke color of subtitle. The full color list is avaiable
-                      in README.md.
-                      Default to black.
-      -w stroke_width Specify stroke width of subtitle. The valie is float
-                      Default to 0.1.
+      -h        Show this help info.
+      -v        Show more verbose log.
+    
+      style options:
+      -fs, --font_size <size>     Size of font. Default 16.
+      -fc, --font_color <color>   Color of font. Default white.
+      -ft, --font_transparency <transparency>
+                                  Transparency of font (0 ~ 100). Default 0.
+      -ow, --outline_width <width>
+                                  Width of font outline, in pixels. Default 1.
+                                  In box border_style, it's the width of box
+      -oc, --outline_color <color>
+                                  Color of font outline. Default black.
+      -ot, --outline_transparency <transparency>
+                                  Transparency of font outline. Default 0.
+      -sd, --shadow_depth <depth> Depth of the font shadow, in pixels. Default 1.
+      -sc, --shadow_color <color> Color of font shadow. Default black.
+      -st, --shadow_transparency <transparency>
+                                  Transparency of font shadow. Default 0.
+      -bl, --bold                 Enable bold font.
+      -il, --italic               Enable italic font.
+      -ul, --underline            Enable font underline.
+      -so, --strikeout            Enable font strikeout.
+      -bs, --border_style <border_style>
+                                  border_style: shadow, box, rectangle. Default shadow.
+                                  shadow: font with shadow.
+                                  box: each subtitle line is embedded in one box.
+                                  rectangle: subtitle lines are embedded in a rectangle.
+      -al, --alignment <align>    align: 'bottom left', 'bottom center', 'bottom right'
+                                         'center left', 'center center', 'center right'
+                                         'top left', 'top center', 'top right'
+                                  Default 'bottom center'
+      -ag, --angle <angle>        Angle (float) of the subtitle, in degree. Default 0.0.
+      -sp, --spacing <spacing>    Extra space (in pixels) between characters. Default 0.
+      -ml, --margin_left <margin> Margin from subtitle to video left border. Default 0.
+      -mr, --margin_right <margin>
+                                  Margin from subtitle to video right border. Default 0.
+      -mv, --margin_vertical <margin>
+                                  Margin from subtitle to video top/bottom border.
+                                  Default 0.
+      -sx, --scalex <scale>       Modifies the width of the font by scale (float).
+                                  Default 1.0.
+      -sy, --scaley <scale>       Modifies the height of the font by scale (float).
+                                  Default 1.0.
+      -qa, --quality <quality>    quality: ultrahigh, high, standard, fast, ultrafast
+                                  The quality of output video.
+                                  Default standard.
 
 Videos with subtitle are generated in the same folder as input videos. The name of generated video has a `.sub` added in the name of input videos.
 
