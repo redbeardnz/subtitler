@@ -65,9 +65,9 @@ class Subtitle:
         ' -vcodec hevc -tag:v hvc1' \
         ' {output_video_path}'
 
-    ALIGNMENT = {"bottom left": 0b0001, "bottom center": 0b0010, "bottom right": 0b0011,
-                 "top left":    0b0101, "top center":    0b0110, "top right":    0b0111,
-                 "center left": 0b1001, "center center": 0b1010, "center right": 0b1011,
+    ALIGNMENT = {"bottom_left": 0b0001, "bottom_center": 0b0010, "bottom_right": 0b0011,
+                 "top_left":    0b0101, "top_center":    0b0110, "top_right":    0b0111,
+                 "center_left": 0b1001, "center_center": 0b1010, "center_right": 0b1011,
     }
 
     # border_style: 4 is added by
@@ -80,7 +80,7 @@ class Subtitle:
         "outline_width": 1, "outline_color": '000000', "outline_transparency": 0,
         "shadow_depth": 1, "shadow_color": '000000', "shadow_transparency": 0,
         "bold": False, "italic": False, "underline": False, "strikeout": False,
-        "border_style": "shadow", "alignment": "bottom center", "angle": 0.0, "spacing": 0,
+        "border_style": "shadow", "alignment": "bottom_center", "angle": 0.0, "spacing": 0,
         "margin_left": 0, "margin_right": 0, "margin_vertical": 0, "scalex": 1, "scaley": 1,
     }
 
@@ -136,10 +136,10 @@ class Subtitle:
             shadow (default), box, or rectangle
         alignment: str
             The position and alignment of subtitle.
-            Accepted values: "bottom left", "bottom center", "bottom right",
-                             "center left", "center center", "center right",
-                             "top left", "top center", "top right".
-            Default to "bottom center"
+            Accepted values: "bottom_left", "bottom_center", "bottom_right",
+                             "center_left", "center_center", "center_right",
+                             "top_left",    "top_center",    "top_right".
+            Default to "bottom_center"
         angle: float
             The angle of subtitle in degree.
             Default to 0.0 degree
@@ -165,8 +165,8 @@ class Subtitle:
 
         if kwargs.get("border_style", "shadow") not in self.BORDER_STYLE:
             raise ValueError(f'border_style [{kwargs.get("border_style", "shadow")}] is not supported')
-        if kwargs.get("alignment", "bottom center") not in self.ALIGNMENT:
-            raise ValueError(f'alignment [{kwargs.get("alignment", "bottom center")}] is not supported')
+        if kwargs.get("alignment", "bottom_center") not in self.ALIGNMENT:
+            raise ValueError(f'alignment [{kwargs.get("alignment", "bottom_center")}] is not supported')
 
         self.style = self.DEFAULT_STYLE
         self.style.update(kwargs)
@@ -303,12 +303,9 @@ if __name__ == "__main__":
                         choices=["shadow", "box", "rectangle"], default="shadow",
                         help="border style of subtitle")
     parser.add_argument("-al", "--alignment", nargs="?",
-                        choices=["bottom left", "bottom center", "bottom right",
-                                 "center left", "center center", "center right",
-                                 "top left", "top center", "top right"],
-                        default="bottom center",
-                        help="border style of subtitle")
-
+                        choices=list(Subtitle.ALIGNMENT.keys()),
+                        default="bottom_center",
+                        help="Alignment of subtitle")
     parser.add_argument("-ag", "--angle", nargs="?",
                         type=float, default=0,
                         help="angle (in degree) of subtitle")

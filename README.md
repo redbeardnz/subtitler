@@ -94,15 +94,15 @@ Run `subtitle.sh -h` to see below usage
                                   Transparency of font (0 ~ 100). Default 0.
       -ow, --outline_width <width>
                                   Width of font outline, in pixels. Default 1.
-                                  In box border_style, it's the width of box
+                                  In box border_style, it's the width of box.
       -oc, --outline_color <color>
                                   RGB Color of font outline. Default 000000 (black).
       -ot, --outline_transparency <transparency>
-                                  Transparency of font outline. Default 0.
+                                  Transparency of font outline (0 ~ 100). Default 0.
       -sd, --shadow_depth <depth> Depth of the font shadow, in pixels. Default 1.
       -sc, --shadow_color <color> RGB Color of font shadow. Default 000000 (black).
       -st, --shadow_transparency <transparency>
-                                  Transparency of font shadow. Default 0.
+                                  Transparency of font shadow (0 ~ 100). Default 0.
       -bl, --bold                 Enable bold font.
       -il, --italic               Enable italic font.
       -ul, --underline            Enable font underline.
@@ -112,10 +112,10 @@ Run `subtitle.sh -h` to see below usage
                                   shadow: font with shadow.
                                   box: each subtitle line is embedded in one box.
                                   rectangle: subtitle lines are embedded in a rectangle.
-      -al, --alignment <align>    align: 'bottom left', 'bottom center', 'bottom right'
-                                         'center left', 'center center', 'center right'
-                                         'top left', 'top center', 'top right'
-                                  Default 'bottom center'
+      -al, --alignment <align>    align: 'bottom_left', 'bottom_center', 'bottom_right'
+                                         'center_left', 'center_center', 'center_right'
+                                         'top_left',    'top_center',    'top_right'
+                                  Default 'bottom_center'
       -ag, --angle <angle>        Angle (float) of the subtitle, in degree. Default 0.0.
       -sp, --spacing <spacing>    Extra space (in pixels) between characters. Default 0.
       -ml, --margin_left <margin> Margin from subtitle to video left border. Default 0.
