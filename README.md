@@ -139,6 +139,12 @@ Videos with subtitle are generated in the same folder as input videos. The name 
  - `subtitle.sh ~/subtitle/demo.mp4` generate subtitled video at `~/subtitle/demo.sub.mp4` with default font size/color stroke width/color
  - `subtitle.sh ~/subtitle/demo.mp4 -fc yellow -fs 90 -oc blue -ow 2` generate the same `~/subtitle/demo.sub.mp4`, but with yellow color font in size 90, and with blue font outline in 2 pixel width.
 
+#### Style Concepts
+
+- Font, Font outline, and Font shadow
+![What is font outline and font shadow](https://github.com/redbeardnz/subtitler/blob/master/doc/font_outline_shadow_color.png)
+
+
 
 # Appendix
 
