@@ -63,6 +63,9 @@ function show_usage {
     echo "                              Default 1.0."
     echo "  -sy, --scaley <scale>       Modifies the height of the font by scale (float)."
     echo "                              Default 1.0."
+    echo "  -qa, --quality <quality>    quality: ultrahigh, high, standard, fast, ultrafast"
+    echo "                              The quality of output video."
+    echo "                              Default standard."
     echo
 }
 

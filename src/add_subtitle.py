@@ -49,9 +49,20 @@ class Subtitle:
         ',ScaleX={scalex}' \
         ',ScaleY={scaley}'
 
-    _FFMPEG_CMD = 'ffmpeg -y' \
+    # quality is ffmpeg crf. 0 lossless ~ 51 wrost
+    _FFMPEG_QUALITY = {"standard": 23, "ultrahigh": 0, "high": 16, "fast": 31, "ultrafast": 51}
+    _FFMPEG_SDR = 'ffmpeg -y' \
         ' -i {input_video_path}' \
         ' -vf "subtitles={srt_path}:force_style=\'{ass_style}\'"' \
+        ' -crf {quality}' \
+        ' {output_video_path}'
+    # the tag hvc1 comes from
+    # https://discussions.apple.com/thread/253813055?answerId=257147397022#257147397022
+    _FFMPEG_HDR = 'ffmpeg -y' \
+        ' -i {input_video_path}' \
+        ' -vf "subtitles={srt_path}:force_style=\'{ass_style}\'"' \
+        ' -crf {quality}' \
+        ' -vcodec hevc -tag:v hvc1' \
         ' {output_video_path}'
 
     ALIGNMENT = {"bottom left": 0b0001, "bottom center": 0b0010, "bottom right": 0b0011,
@@ -180,16 +191,27 @@ class Subtitle:
         self.style["strikeout"] = -1 if self.style["strikeout"] else 0
 
         self.video_info = self._prob_video_info(video)
+        self._video_quality = self._FFMPEG_QUALITY[kwargs.get("quality", "standard")]
         self._video = video
         self._srt = srt
 
 
     def write_to_file(self, file_path: Path):
         ass_style = self._SUBTITLE_ASS_STYLE.format(**self.style)
-        cmd = self._FFMPEG_CMD.format(input_video_path=self._video,
-                                      srt_path=self._srt,
-                                      ass_style=ass_style,
-                                      output_video_path=file_path)
+        if self.video_info["codec_name"].lower() in ['hevc', 'h265']:
+            # for hdr, another solution:
+            # codec='libx264',
+            # '-color_trc', video_info["color_transfer"],
+            # '-color_primaries', video_info["color_primaries"],
+            # '-pix_fmt', video_info["pix_fmt"]],
+            cmd_pattern = self._FFMPEG_HDR
+        else:
+            cmd_pattern = self._FFMPEG_SDR
+        cmd = cmd_pattern.format(input_video_path=self._video,
+                                 srt_path=self._srt,
+                                 ass_style=ass_style,
+                                 quality=self._video_quality,
+                                 output_video_path=file_path)
         logging.debug(cmd)
         try:
             p = subprocess.run(cmd, shell=True, capture_output=True, check=True)
@@ -315,6 +337,10 @@ if __name__ == "__main__":
     parser.add_argument("-sy", "--scaley", nargs="?",
                         type=float, default=1,
                         help="Modifies the height of the font")
+    parser.add_argument("-qa", "--quality", nargs="?",
+                        choices=list(Subtitle._FFMPEG_QUALITY.keys()),
+                        default=list(Subtitle._FFMPEG_QUALITY.keys())[0],
+                        help="The quality of output video")
 
     parser.add_argument("-v", "--verbose", action="store_true", default=False)
     args = parser.parse_args()
@@ -329,48 +355,6 @@ if __name__ == "__main__":
     sub = Subtitle(font_name='WenQuanYi-Micro-Hei', **dict(args._get_kwargs()))
     sub.write_to_file(args.output)
     end = perf_counter()
-
-# with tempfile.TemporaryDirectory() as tmp_dir:
-#     os.chdir(tmp_dir)
-#     add_subtitle_to_video(args.video,
-#                           args.subtitle_file,
-#                           args.output,
-#                           font_name='WenQuanYi-Micro-Hei',
-#                           font_size=20,
-#                           font_color=color_name('2:pink purple'),
-#                           outline_width=1,
-#                           border_style='box',
-#     )
-    # clip = VideoFileClip(str(args.video))
-    # generator = lambda txt: TextClip(txt,
-    #                                  font='WenQuanYi-Micro-Hei',
-    #                                  fontsize=args.font_size,
-    #                                  color=args.font_color,
-    #                                  stroke_color=args.stroke_color,
-    #                                  stroke_width=args.stroke_width,
-    #                                  method='caption',
-    #                                  size=clip.size,
-    #                                  align='South')
-    # sub = SubtitlesClip(str(args.subtitle_file), generator)
-    # out_video = CompositeVideoClip([clip, sub])
-    # out_video_name = args.video.parent / f'{args.video.stem}.sub{args.video.suffix}'
-
-    # if video_info["codec_name"].lower() in ['hevc', 'h265']:
-    #     out_video.write_videofile(str(out_video_name),
-    #                               audio_codec='aac',
-    #                               codec='libx264',
-    #                               ffmpeg_params=[
-    #                                   '-color_trc', video_info["color_transfer"],
-    #                                   '-color_primaries', video_info["color_primaries"],
-    #                                   '-pix_fmt', video_info["pix_fmt"]],
-    #                               fps=clip.fps,
-    #                               threads=os.cpu_count())
-    # else:
-    #     out_video.write_videofile(str(out_video_name),
-    #                               audio_codec='aac',
-    #                               fps=clip.fps,
-    #                               threads=os.cpu_count())
-
 
     logging.info("video is saved to %s, total cost %s seconds",
                  GREEN+f'{args.output}'+RESET,
