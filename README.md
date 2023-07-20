@@ -3,7 +3,7 @@
 
 Hello the fellows of **New Federal States of China (NFSC)**.
 
-This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to generate subtitle file (.srt), and use [moviepy](https://github.com/Zulko/moviepy) to add subtitles to a video. Python is the main programming language. Docker is used to deploy the AI to fellows' PC.
+This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to generate subtitle file (.srt), and use [ffmpeg](https://www.ffmpeg.org/) to add subtitles to a video. Python is the main programming language. Docker is used to deploy the AI to fellows' PC.
 
 
 # Setup
@@ -142,8 +142,7 @@ Videos with subtitle are generated in the same folder as input videos. The name 
 
 # Appendix
 
- - The full color table:
-
+1. Available colors are listed in [COLOR_TABLE.md](https://github.com/redbeardnz/subtitler/blob/master/COLOR_TABLE.md)
 
 
 # License
