@@ -3,7 +3,7 @@
 import argparse
 import json
 import logging
-from matplotlib import colors
+# from matplotlib import colors
 import os
 from pathlib import Path
 import subprocess
@@ -73,13 +73,12 @@ class Subtitle:
     # border_style: 4 is added by
     # https://github.com/libass/libass/blob/d1f0f20bfa98864cd2aaf931f144909d319545aa/Changelog#L142
     BORDER_STYLE = {"shadow": 1, "box": 3, "rectangle": 4}
-    COLORS = list(colors.CSS4_COLORS.keys()) + list(colors.XKCD_COLORS.keys())
 
     # default style values
     DEFAULT_STYLE = {
-        "font_size": 16, "font_color": 'white', "font_transparency": 0,
-        "outline_width": 1, "outline_color": 'black', "outline_transparency": 0,
-        "shadow_depth": 1, "shadow_color": 'black', "shadow_transparency": 0,
+        "font_size": 16, "font_color": 'FFFFFF', "font_transparency": 0,
+        "outline_width": 1, "outline_color": '000000', "outline_transparency": 0,
+        "shadow_depth": 1, "shadow_color": '000000', "shadow_transparency": 0,
         "bold": False, "italic": False, "underline": False, "strikeout": False,
         "border_style": "shadow", "alignment": "bottom center", "angle": 0.0, "spacing": 0,
         "margin_left": 0, "margin_right": 0, "margin_vertical": 0, "scalex": 1, "scaley": 1,
@@ -164,12 +163,6 @@ class Subtitle:
             Default to 1
         """
 
-        if kwargs.get("font_color", "white") not in self.COLORS:
-            raise ValueError(f'font_color [{kwargs.get("font_color", "white")}] is not found')
-        if kwargs.get("outline_color", "black") not in self.COLORS:
-            raise ValueError(f'outline_color [{kwargs.get("outline_color", "black")}] is not found')
-        if kwargs.get("shadow_color", "black") not in self.COLORS:
-            raise ValueError(f'shadow_color [{kwargs.get("shadow_color", "black")}] is not found')
         if kwargs.get("border_style", "shadow") not in self.BORDER_STYLE:
             raise ValueError(f'border_style [{kwargs.get("border_style", "shadow")}] is not supported')
         if kwargs.get("alignment", "bottom center") not in self.ALIGNMENT:
@@ -177,11 +170,11 @@ class Subtitle:
 
         self.style = self.DEFAULT_STYLE
         self.style.update(kwargs)
-        self.style["font_color"] = self._color_bgr(self.style["font_color"])
+        self.style["font_color"] = self._rgb_to_bgr(self.style["font_color"])
         self.style["font_transparency"] = self._transparency(self.style["font_transparency"])
-        self.style["outline_color"] = self._color_bgr(self.style["outline_color"])
+        self.style["outline_color"] = self._rgb_to_bgr(self.style["outline_color"])
         self.style["outline_transparency"] = self._transparency(self.style["outline_transparency"])
-        self.style["shadow_color"] = self._color_bgr(self.style["shadow_color"])
+        self.style["shadow_color"] = self._rgb_to_bgr(self.style["shadow_color"])
         self.style["shadow_transparency"] = self._transparency(self.style["shadow_transparency"])
         self.style["border_style"] = self.BORDER_STYLE[self.style["border_style"]]
         self.style["alignment"] = self.ALIGNMENT[self.style["alignment"]]
@@ -225,12 +218,12 @@ class Subtitle:
             return False
 
 
-    def _color_bgr(self, color: str):
-        # color -> rgb_hex -> bgr_hex
-        # example: 'xkcd:pink' -> '#FF81C0' -> 'C081FF'
-        #          'pink'      -> '#FFC0CB' -> 'CBC0FF
-        rgb_hex = colors.to_hex(color)[1:].upper()
-        return f'{rgb_hex[4:6]}{rgb_hex[2:4]}{rgb_hex[0:2]}'
+    def _rgb_to_bgr(self, rgb: str):
+        # rgb_hex -> bgr_hex
+        # example: 'xkcd:pink' -> 'FF81C0' -> 'C081FF'
+        #          'pink'      -> 'FFC0CB' -> 'CBC0FF
+        rgb = rgb.upper()
+        return f'{rgb[4:6]}{rgb[2:4]}{rgb[0:2]}'
 
 
     def _transparency(self, transparency: int):
@@ -275,8 +268,8 @@ if __name__ == "__main__":
                         type=int, default=16,
                         help="size of font")
     parser.add_argument("-fc", "--font_color", nargs="?",
-                        type=str, default='white',
-                        help="color of font")
+                        type=str, default='FFFFFF',
+                        help="RGB color of font")
     parser.add_argument("-ft", "--font_transparency", nargs="?",
                         type=int, default=0,
                         help="transparency of font")
@@ -285,8 +278,8 @@ if __name__ == "__main__":
                         type=int, default=1,
                         help="width of font outline, in pixels. In box border_style, it's the width of box.")
     parser.add_argument("-oc", "--outline_color", nargs="?",
-                        type=str, default='black',
-                        help="color of font outline")
+                        type=str, default='000000',
+                        help="RGB color of font outline")
     parser.add_argument("-ot", "--outline_transparency", nargs="?",
                         type=int, default=0,
                         help="transparency of font outline")
@@ -295,8 +288,8 @@ if __name__ == "__main__":
                         type=int, default=1,
                         help="depth of the font shadow, in pixels")
     parser.add_argument("-sc", "--shadow_color", nargs="?",
-                        type=str, default='black',
-                        help="color of font shadow")
+                        type=str, default='000000',
+                        help="RGB color of font shadow")
     parser.add_argument("-st", "--shadow_transparency", nargs="?",
                         type=int, default=0,
                         help="transparency of font shadow")

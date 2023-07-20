@@ -16,7 +16,7 @@ RUN apt install -qy imagemagick fonts-liberation locales ttf-wqy-microhei && \
 
 ENV LC_ALL C.UTF-8
 
-RUN pip install matplotlib
+# RUN pip install matplotlib
 
 # modify ImageMagick policy file so that Textclips work correctly.
 RUN sed -i 's/none/read,write/g' /etc/ImageMagick-6/policy.xml 
