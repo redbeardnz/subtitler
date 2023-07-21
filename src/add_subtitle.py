@@ -269,7 +269,7 @@ if __name__ == "__main__":
                         help="size of font")
     parser.add_argument("-fc", "--font_color", nargs="?",
                         type=str, default='FFFFFF',
-                        help="RGB color of font")
+                        help="RGB color hex of font")
     parser.add_argument("-ft", "--font_transparency", nargs="?",
                         type=int, default=0,
                         help="transparency of font")
@@ -279,7 +279,7 @@ if __name__ == "__main__":
                         help="width of font outline, in pixels. In box border_style, it's the width of box.")
     parser.add_argument("-oc", "--outline_color", nargs="?",
                         type=str, default='000000',
-                        help="RGB color of font outline")
+                        help="RGB color hex of font outline")
     parser.add_argument("-ot", "--outline_transparency", nargs="?",
                         type=int, default=0,
                         help="transparency of font outline")
@@ -289,7 +289,7 @@ if __name__ == "__main__":
                         help="depth of the font shadow, in pixels")
     parser.add_argument("-sc", "--shadow_color", nargs="?",
                         type=str, default='000000',
-                        help="RGB color of font shadow")
+                        help="RGB color hex of font shadow")
     parser.add_argument("-st", "--shadow_transparency", nargs="?",
                         type=int, default=0,
                         help="transparency of font shadow")
@@ -300,7 +300,7 @@ if __name__ == "__main__":
     parser.add_argument("-so", "--strikeout", action="store_true", default=False)
 
     parser.add_argument("-bs", "--border_style", nargs="?",
-                        choices=["shadow", "box", "rectangle"], default="shadow",
+                        choices=list(Subtitle.BORDER_STYLE.keys()),
                         help="border style of subtitle")
     parser.add_argument("-al", "--alignment", nargs="?",
                         choices=list(Subtitle.ALIGNMENT.keys()),

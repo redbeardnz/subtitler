@@ -2,6 +2,7 @@
 # Welcome to Subtitler!
 
 Hello the fellows of **New Federal States of China (NFSC)**.
+![](https://github.com/redbeardnz/subtitler/blob/master/doc/nfsc_flag.jpg)
 
 This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to generate subtitle file (.srt), and use [ffmpeg](https://www.ffmpeg.org/) to add subtitles to a video. Python is the main programming language. Docker is used to deploy the AI to fellows' PC.
 
@@ -89,18 +90,18 @@ Run `subtitle.sh -h` to see below usage
     
       style options:
       -fs, --font_size <size>     Size of font. Default 16.
-      -fc, --font_color <color>   RGB Color of font. Default FFFFFF (white).
+      -fc, --font_color <color>   RGB Color hex of font. Default FFFFFF (white).
       -ft, --font_transparency <transparency>
                                   Transparency of font (0 ~ 100). Default 0.
       -ow, --outline_width <width>
                                   Width of font outline, in pixels. Default 1.
                                   In box border_style, it's the width of box.
       -oc, --outline_color <color>
-                                  RGB Color of font outline. Default 000000 (black).
+                                  RGB Color hex of font outline. Default 000000 (black).
       -ot, --outline_transparency <transparency>
                                   Transparency of font outline (0 ~ 100). Default 0.
       -sd, --shadow_depth <depth> Depth of the font shadow, in pixels. Default 1.
-      -sc, --shadow_color <color> RGB Color of font shadow. Default 000000 (black).
+      -sc, --shadow_color <color> RGB Color hex of font shadow. Default 000000 (black).
       -st, --shadow_transparency <transparency>
                                   Transparency of font shadow (0 ~ 100). Default 0.
       -bl, --bold                 Enable bold font.
@@ -139,16 +140,31 @@ Videos with subtitle are generated in the same folder as input videos. The name 
  - `subtitle.sh ~/subtitle/demo.mp4` generate subtitled video at `~/subtitle/demo.sub.mp4` with default font size/color stroke width/color
  - `subtitle.sh ~/subtitle/demo.mp4 -fc yellow -fs 90 -oc blue -ow 2` generate the same `~/subtitle/demo.sub.mp4`, but with yellow color font in size 90, and with blue font outline in 2 pixel width.
 
-#### Style Concepts
-
-- Font, Font outline, and Font shadow
-![What is font outline and font shadow](https://github.com/redbeardnz/subtitler/blob/master/doc/font_outline_shadow_color.png)
-
-
 
 # Appendix
 
-1. Available RBG colors can be found at [RGB_Color](https://www.rapidtables.com/web/color/RGB_Color.html)
+- RBG colors ${\color{#F7CA5B}hex}$ can be found at [RGB_Color](https://www.rapidtables.com/web/color/RGB_Color.html)
+
+- What are Font, Outline, and Shadow?
+![](https://github.com/redbeardnz/subtitler/blob/master/doc/font_outline_shadow.png)
+
+- The border_style modes.
+![](https://github.com/redbeardnz/subtitler/blob/master/doc/border_style_modes.png)
+
+- The Outline and Shadow in box and rectangle border style modes.
+![](https://github.com/redbeardnz/subtitler/blob/master/doc/outline_shadow_in_box_rectangle_modes.png)
+
+- Transparency.
+![](https://github.com/redbeardnz/subtitler/blob/master/doc/transparency.png)
+
+- margins and alignment.
+![](https://github.com/redbeardnz/subtitler/blob/master/doc/transparency.png)
+
+- The scalex and scaley.
+![](https://github.com/redbeardnz/subtitler/blob/master/doc/scalex_scaley.png)
+
+- The angle.
+![](https://github.com/redbeardnz/subtitler/blob/master/doc/angle.png)
 
 
 # License
