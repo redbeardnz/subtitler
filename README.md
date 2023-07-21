@@ -158,7 +158,7 @@ Videos with subtitle are generated in the same folder as input videos. The name 
 ![](https://github.com/redbeardnz/subtitler/blob/master/doc/transparency.png)
 
 - margins and alignment.
-![](https://github.com/redbeardnz/subtitler/blob/master/doc/transparency.png)
+![](https://github.com/redbeardnz/subtitler/blob/master/doc/margins_and_alignment.png)
 
 - The scalex and scaley.
 ![](https://github.com/redbeardnz/subtitler/blob/master/doc/scalex_scaley.png)
