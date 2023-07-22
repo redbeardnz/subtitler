@@ -301,6 +301,7 @@ if __name__ == "__main__":
 
     parser.add_argument("-bs", "--border_style", nargs="?",
                         choices=list(Subtitle.BORDER_STYLE.keys()),
+                        default="shadow",
                         help="border style of subtitle")
     parser.add_argument("-al", "--alignment", nargs="?",
                         choices=list(Subtitle.ALIGNMENT.keys()),
