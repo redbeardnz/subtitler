@@ -20,7 +20,7 @@ function show_usage {
 OPTIONS=""
 # Reset in case getopts has been used previously in the shell.
 OPTIND=1
-while getopts "hvm:d:" opt; do
+while getopts "hivm:d:" opt; do
     case ${opt} in
         h ) # process option h
             show_usage
