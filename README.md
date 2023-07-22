@@ -8,6 +8,10 @@ This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to ge
 
 
 # Setup
+## Setup Mac environment
+- [Mac 电脑 AI 部署环境搭建 (Part 1) 安装 brew, git, coreutils](https://gettr.com/post/p2mkjtw3b21)
+- [Mac 电脑 AI 部署环境搭建 (Part 2) 安装 docker](https://gettr.com/post/p2mkqrr9510)
+
 ## Install Source Code
 - mkdir ~/Desktop/software
 - cd ~/Desktop/software
