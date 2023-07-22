@@ -9,16 +9,15 @@ This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to ge
 
 # Setup
 ## Install Source Code
-- mkdir ~/software
-- cd ~/software
+- mkdir ~/Desktop/software
+- cd ~/Desktop/software
 - git clone https://github.com/redbeardnz/subtitler.git
 - cd subtitler
-- mkdir ~/bin
-- ln -s $(pwd)/*.sh ~/bin/
-- echo 'PATH=${PATH}:~/bin' >> ~/.bash_profile
+- ./install.sh
 
 ## Uninstall Source Code (it needs your Mac's Password to run rm as root user)
-- sudo rm -rf ~/software/subtitler
+- ~/Desktop/software/subtitler/uninstall.sh
+- sudo rm -rf ~/Desktop/software/subtitler
 
 # Run
 ## demo videos:
