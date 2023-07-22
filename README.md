@@ -27,7 +27,7 @@ This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to ge
 - miles.mp4: https://media.gettr.com/group12/getter/2023/07/15/23/0629d5e3-d17a-dfc6-8762-2de00aa4f8f2/out.mp4
 
 ## Retrive subtitle
-You can convert the speech of a video into text and save it as a subtitle **SRT** file by [asr.sh](https://github.com/redbeardnz/subtitler/blob/master/asr.sh).
+You can convert the speech of a video into text and save it as a subtitle **SRT** file by [asr.sh](https://github.com/redbeardnz/subtitler/blob/master/scripts/asr.sh).
 Run `asr.sh -h` to see below usage
 
     Usage: asr.sh -h   show this help info.
@@ -59,7 +59,7 @@ Run `asr.sh -h` to see below usage
 - `asr.sh -i -m medium -v ~/subtitle/demo.mp4`, generates SRT file using `medium` whisper model downloaded into folder `models/`.
 - `asr.sh -i -m medium -d my_models -v ~/subtitle/demo.mp4`, generates SRT file using `medium` whisper model downloaded into folder `my_models/`.
 
-> ***HINT***: When you run [asr.sh](https://github.com/redbeardnz/subtitler/blob/master/asr.sh) at the first time, you need connect your computer to the internet to download whisper models. Once models are well downloaded, internet connection is unnecessary any longer.
+> ***HINT***: When you run [asr.sh](https://github.com/redbeardnz/subtitler/blob/master/scripts/asr.sh) at the first time, you need connect your computer to the internet to download whisper models. Once models are well downloaded, internet connection is unnecessary any longer.
 
 #### Uninstall AI models
 - sudo rm -rf ~/software/subtitler/models
@@ -68,7 +68,7 @@ Run `asr.sh -h` to see below usage
 - docker rmi subtitler:latest
 
 ## Add subtitle to video
-When SRT file `{video}.srt` is available, you can run [subtitle.sh](https://github.com/redbeardnz/subtitler/blob/master/subtitle.sh) to add subtitle into video.
+When SRT file `{video}.srt` is available, you can run [subtitle.sh](https://github.com/redbeardnz/subtitler/blob/master/scripts/subtitle.sh) to add subtitle into video.
 Run `subtitle.sh -h` to see below usage
 
     Usage: subtitle.sh [-h] show this help info.
@@ -138,7 +138,9 @@ Videos with subtitle are generated in the same folder as input videos. The name 
 #### Examples:
 
  - `subtitle.sh ~/subtitle/demo.mp4` generate subtitled video at `~/subtitle/demo.sub.mp4` with default font size/color stroke width/color
- - `subtitle.sh ~/subtitle/demo.mp4 -fc yellow -fs 90 -oc blue -ow 2` generate the same `~/subtitle/demo.sub.mp4`, but with yellow color font in size 90, and with blue font outline in 2 pixel width.
+ - `subtitle.sh ~/subtitle/demo.mp4 -fc FFFF00 -fs 90 -oc 0000FF -ow 2` generate the same `~/subtitle/demo.sub.mp4`, but with yellow color font in size 90, and with blue font outline in 2 pixel width. See RGB hex in Appendix for yellow color's hex FFFF00 and blue color's hex 0000FF.
+
+> ***HINT***: When you run [subtitle.sh](https://github.com/redbeardnz/subtitler/blob/master/scripts/subtitle.sh) the [style options] must be behind of video path
 
 
 # Appendix

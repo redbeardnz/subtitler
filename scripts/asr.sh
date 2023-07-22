@@ -1,7 +1,6 @@
 #!/bin/bash
 
-
-ROOT_DIR=$(dirname $(realpath -LP ${0}))
+ROOT_DIR=$(dirname $(dirname $(realpath -LP ${0})))
 SCRIPT_NAME=$(basename ${0})
 
 function show_usage {
