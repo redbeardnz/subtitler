@@ -1,6 +1,6 @@
 #! /bin/bash
 
-ROOT_DIR=$(dirname $(realpath -LP ${0}))
+ROOT_DIR=$(dirname $(realpath ${0}))
 
 mkdir -p ~/bin && \
     ln -s ${ROOT_DIR}/scripts/asr.sh ~/bin/ && \
