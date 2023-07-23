@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOT_DIR=$(dirname $(dirname $(realpath -LP ${0})))
+ROOT_DIR=$(dirname $(dirname $(realpath ${0})))
 SCRIPT_NAME=$(basename ${0})
 
 function show_usage {
@@ -99,7 +99,7 @@ while getopts "hv" opt; do
 done
 shift $((OPTIND-1))
 
-VIDEO=$(realpath -LP ${1})
+VIDEO=$(realpath ${1})
 shift
 OPTIONS="${OPTIONS} ${@}"
 

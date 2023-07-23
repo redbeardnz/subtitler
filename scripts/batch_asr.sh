@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOT_DIR=$(dirname $(dirname $(realpath -LP ${0})))
+ROOT_DIR=$(dirname $(dirname $(realpath ${0})))
 SCRIPT_NAME=$(basename ${0})
 
 function show_usage {
@@ -36,7 +36,7 @@ shift $((OPTIND-1))
 ####################
 ####    main    ####
 ####################
-INPUT_FILE=$(realpath -LP ${1})
+INPUT_FILE=$(realpath ${1})
 INPUT_FILE_DIR=$(dirname ${INPUT_FILE})
 CWD=$(pwd)
 

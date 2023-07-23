@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOT_DIR=$(dirname $(dirname $(realpath -LP ${0})))
+ROOT_DIR=$(dirname $(dirname $(realpath ${0})))
 SCRIPT_NAME=$(basename ${0})
 
 function show_usage {
@@ -50,7 +50,7 @@ while getopts "hvm:d:i" opt; do
             exit 0
             ;;
         d ) # process option d
-            MODEL_DIR=$(realpath -LP ${OPTARG})
+            MODEL_DIR=$(realpath ${OPTARG})
             ;;
         m ) # process option m
             MODEL=${OPTARG}
@@ -70,7 +70,7 @@ while getopts "hvm:d:i" opt; do
 done
 shift $((OPTIND-1))
 
-VIDEO=$(realpath -LP ${1})
+VIDEO=$(realpath ${1})
 VIDEO_NAME=$(basename ${VIDEO})
 VIDEO_DIR=$(dirname ${VIDEO})
 SRT_FILE=${VIDEO}.srt
