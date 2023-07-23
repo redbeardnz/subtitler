@@ -7,6 +7,16 @@ Hello the fellows of **New Federal States of China (NFSC)**.
 This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to generate subtitle file (.srt), and use [ffmpeg](https://www.ffmpeg.org/) to add subtitles to a video. Python is the main programming language. Docker is used to deploy the AI to fellows' PC.
 
 
+# Other subtitle tools
+- [Adobe premiere Pro](https://www.adobe.com/nz/products/premiere/explore/speech.html)
+  - Good GUI and subtitle is good as well.
+  - Premiere's ASR is not as good as Whisper.
+  - Not free.
+- [Captions App (require Mac os 13+)](https://apps.apple.com/nz/app/captions-for-talking-videos/id1541407007)
+  - Good GUI and subtitle is good as well.
+  - Use the same Whisper as ASR.
+  - It require Mac os version 13+.
+
 # Setup
 ## Setup Mac environment
 - [Mac 电脑 AI 部署环境搭建 (Part 1) 安装 brew, git, coreutils](https://gettr.com/post/p2mkjtw3b21)
