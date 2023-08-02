@@ -43,8 +43,8 @@ This project use AI **ASR** ([whisper](https://github.com/openai/whisper)) to ge
 You can convert the speech of a video into text and save it as a subtitle **SRT** file by [asr.sh](https://github.com/redbeardnz/subtitler/blob/master/scripts/asr.sh).
 Run `asr.sh -h` to see below usage
 
-    Usage: asr.sh -h   show this help info.
-	       asr.sh [-v] [-m model] [-d model_dir] [-i] video
+    Usage: asr.sh -h
+           asr.sh [-v] [-i] video [asr options]
     asr.sh converts the speech of a video to text.
     The text is saved in a srt file with a suffix '.srt'
     appended to the name of input video
@@ -57,14 +57,41 @@ Run `asr.sh -h` to see below usage
                    video with a name equaling to video's name + .srt suffix.
     
       options:
-      -d model_dir Specify the location to store whisper models.
-                   Default to /Users/knox/work/subtitler/models.
-      -m model     Specify whisper asr model to use. The full model list is
+      -i           Enable network. By default network is disabled.
+                   '-i' must be specified when you need download AI model.
+      -v           Show more log.
+      -h           Show this help info.
+    
+      asr options:
+      -m, --model <asr_model>
+                   asr_model is the whisper model to use. The full whisper model list is
                    [tiny.en tiny base.en base small.en small medium.en medium
                     large-v1 large-v2 large].
                    Default to small.
-      -i           Enable network. By default network is disabled.
-                   '-i' must be specified when you need download AI model.
+      -mt, --model_translation <model_translation>
+                   model_translation specify neural translation model to use.
+                   The full model list is [small, large]
+                   Default to small.
+      -t, --translate <language_code>
+                   language_code specify the target language to translate.
+                   The full language code list is:
+                   [aav, aed, af, alv, am, ar, art, ase, az, bat, bcl, be, bem, ber, bg,
+                    bi, bn, bnt, bzs, ca, cau, ccs, ceb, cel, chk, cpf, crs, cs, csg, csn,
+                    cus, cy, da, de, dra, ee, efi, el, en, eo, es, et, eu, euq, fi, fj,
+                    fr, fse, ga, gaa, gil, gl, grk, guw, gv, ha, he, hi, hil, ho, hr, ht,
+                    hu, hy, id, ig, ilo, is, iso, it, ja, jap, ka, kab, kg, kj, kl, ko,
+                    kqn, kwn, kwy, lg, ln, loz, lt, lu, lua, lue, lun, luo, lus, lv, map,
+                    mfe, mfs, mg, mh, mk, mkh, ml, mos, mr, ms, mt, mul, ng, nic, niu, nl,
+                    no, nso, ny, nyk, om, pa, pag, pap, phi, pis, pl, pon, poz, pqe, pqw,
+                    prl, pt, rn, rnd, ro, roa, ru, run, rw, sal, sg, sh, sit, sk, sl, sm,
+                    sn, sq, srn, ss, ssp, st, sv, sw, swc, taw, tdt, th, ti, tiv, tl, tll,
+                    tn, to, toi, tpi, tr, trk, ts, tum, tut, tvl, tw, ty, tzo, uk, umb,
+                    ur, ve, vi, vsl, wa, wal, war, wls, xh, yap, yo, yua, zai, zh, zne]
+                   See project Appendix for mapping from language name to language code.
+                   Default: no translation.
+      -ks, --keep_source
+                   if this option is specified, srt contains both original and translated
+                   lanugages. if not specified, srt contains only the translated language.
 
 **SRT** files are generated in the same folder as input videos.
 #### Example:

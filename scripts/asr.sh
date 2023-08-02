@@ -4,8 +4,8 @@ ROOT_DIR=$(dirname $(dirname $(realpath ${0})))
 SCRIPT_NAME=$(basename ${0})
 
 function show_usage {
-    echo "Usage: ${SCRIPT_NAME} -h   show this help info."
-    echo "       ${SCRIPT_NAME} [-v] [-m model] [-d model_dir] [-i] video"
+    echo "Usage: ${SCRIPT_NAME} -h"
+    echo "       ${SCRIPT_NAME} [-v] [-i] video [asr options]"
     echo "${SCRIPT_NAME} converts the speech of a video to text."
     echo "The text is saved in a srt file with a suffix '.srt'"
     echo "appended to the name of input video"
@@ -18,14 +18,41 @@ function show_usage {
     echo "               video with a name equaling to video's name + .srt suffix."
     echo
     echo "  options:"
-    echo "  -d model_dir Specify the location to store whisper models."
-    echo "               Default to ${ROOT_DIR}/models."
-    echo "  -m model     Specify whisper asr model to use. The full model list is"
+    echo "  -i           Enable network. By default network is disabled."
+    echo "               '-i' must be specified when you need download AI model."
+    echo "  -v           Show more log."
+    echo "  -h           Show this help info."
+    echo
+    echo "  asr options:"
+    echo "  -m, --model <asr_model>"
+    echo "               asr_model is the whisper model to use. The full whisper model list is"
     echo "               [tiny.en tiny base.en base small.en small medium.en medium"
     echo "                large-v1 large-v2 large]."
     echo "               Default to small."
-    echo "  -i           Enable network. By default network is disabled."
-    echo "               '-i' must be specified when you need download AI model."
+    echo "  -mt, --model_translation <model_translation>"
+    echo "               model_translation specify neural translation model to use."
+    echo "               The full model list is [small, large]"
+    echo "               Default to small."
+    echo "  -t, --translate <language_code>"
+    echo "               language_code specify the target language to translate."
+    echo "               The full language code list is:"
+    echo "               [aav, aed, af, alv, am, ar, art, ase, az, bat, bcl, be, bem, ber, bg,"
+    echo "                bi, bn, bnt, bzs, ca, cau, ccs, ceb, cel, chk, cpf, crs, cs, csg, csn,"
+    echo "                cus, cy, da, de, dra, ee, efi, el, en, eo, es, et, eu, euq, fi, fj,"
+    echo "                fr, fse, ga, gaa, gil, gl, grk, guw, gv, ha, he, hi, hil, ho, hr, ht,"
+    echo "                hu, hy, id, ig, ilo, is, iso, it, ja, jap, ka, kab, kg, kj, kl, ko,"
+    echo "                kqn, kwn, kwy, lg, ln, loz, lt, lu, lua, lue, lun, luo, lus, lv, map,"
+    echo "                mfe, mfs, mg, mh, mk, mkh, ml, mos, mr, ms, mt, mul, ng, nic, niu, nl,"
+    echo "                no, nso, ny, nyk, om, pa, pag, pap, phi, pis, pl, pon, poz, pqe, pqw,"
+    echo "                prl, pt, rn, rnd, ro, roa, ru, run, rw, sal, sg, sh, sit, sk, sl, sm,"
+    echo "                sn, sq, srn, ss, ssp, st, sv, sw, swc, taw, tdt, th, ti, tiv, tl, tll,"
+    echo "                tn, to, toi, tpi, tr, trk, ts, tum, tut, tvl, tw, ty, tzo, uk, umb,"
+    echo "                ur, ve, vi, vsl, wa, wal, war, wls, xh, yap, yo, yua, zai, zh, zne]"
+    echo "               See project Appendix for mapping from language name to language code."
+    echo "               Default: no translation."
+    echo "  -ks, --keep_source"
+    echo "               if this option is specified, srt contains both original and translated"
+    echo "               lanugages. if not specified, srt contains only the translated language."
 }
 
 
@@ -36,30 +63,23 @@ if [ $# -eq 0 ]; then
     exit 0
 fi
 
-VERBOSE=''
-MODEL=small
 MODEL_DIR=${ROOT_DIR}/models
 NET_ENABLED=false
+OPTIONS=''
 
 # Reset in case getopts has been used previously in the shell.
 OPTIND=1
-while getopts "hvm:d:i" opt; do
+while getopts "ihv" opt; do
     case ${opt} in
         h ) # process option h
             show_usage
             exit 0
             ;;
-        d ) # process option d
-            MODEL_DIR=$(realpath ${OPTARG})
-            ;;
-        m ) # process option m
-            MODEL=${OPTARG}
-            ;;
         i ) # process option i
             NET_ENABLED=true
             ;;
         v ) # process option v
-            VERBOSE='-v'
+            OPTIONS='-v'
             ;;
         \? ) # invalid option
             echo
@@ -71,6 +91,9 @@ done
 shift $((OPTIND-1))
 
 VIDEO=$(realpath ${1})
+shift
+OPTIONS="${OPTIONS} ${@}"
+
 VIDEO_NAME=$(basename ${VIDEO})
 VIDEO_DIR=$(dirname ${VIDEO})
 SRT_FILE=${VIDEO}.srt
@@ -88,5 +111,5 @@ if ${NET_ENABLED}; then
 fi
 
 cd ${ROOT_DIR}
-docker-compose -f docker/docker-compose.yml run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${SRT_FILE}:/output/${SRT_FILE_NAME} -v ${MODEL_DIR}:/models ${DOCER_SERVICE} /app/retrieve.py ${VERBOSE} -m ${MODEL} -md /models /video/${VIDEO_NAME} /output
+docker-compose -f docker/docker-compose.yml run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${SRT_FILE}:/output/${SRT_FILE_NAME} -v ${MODEL_DIR}:/models ${DOCER_SERVICE} /app/asr.py ${OPTIONS} /video/${VIDEO_NAME} /output
 cd ${CWD}
