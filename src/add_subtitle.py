@@ -346,6 +346,6 @@ if __name__ == "__main__":
     sub.write_to_file(args.output)
     end = perf_counter()
 
-    logging.info("video is saved to %s, total cost %s seconds",
-                 GREEN+f'{args.output}'+RESET,
-                 GREEN+f'{end-start:.2f}'+RESET)
+    logging.critical("video is saved to %s, total cost %s seconds",
+                     GREEN+f'{args.output.name}'+RESET,
+                     GREEN+f'{end-start:.2f}'+RESET)

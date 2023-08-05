@@ -124,8 +124,8 @@ if __name__ == "__main__":
     writer(transcription, srt_file)
 
     end = perf_counter()
-    logging.info("subtitle is saved to %s, total cost %s seconds",
-                 GREEN+f'{Path(srt_file).name}'+RESET,
-                 GREEN+f'{end-start:.2f}'+RESET)
+    logging.critical("subtitle is saved to %s, total cost %s seconds",
+                     GREEN+f'{Path(srt_file).name}'+RESET,
+                     GREEN+f'{end-start:.2f}'+RESET)
 
     sys.exit()

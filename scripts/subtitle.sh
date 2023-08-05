@@ -5,7 +5,7 @@ SCRIPT_NAME=$(basename ${0})
 
 function show_usage {
     echo "Usage: ${SCRIPT_NAME} [-h] show this help info."
-    echo "       ${SCRIPT_NAME} [-v] video [style options]"
+    echo "       ${SCRIPT_NAME} video [style options]"
     echo "${SCRIPT_NAME} add subtitle to video. The subtitle text"
     echo "is retrieved from a srt file with a suffix '.srt' appended"
     echo "to the name of input video"
@@ -19,7 +19,6 @@ function show_usage {
     echo
     echo "  options:"
     echo "  -h        Show this help info."
-    echo "  -v        Show more verbose log."
     echo
     echo "  style options:"
     echo "  -fs, --font_size <size>     Size of font. Default 16."
@@ -65,6 +64,8 @@ function show_usage {
     echo "  -qa, --quality <quality>    quality: ultrahigh, high, standard, fast, ultrafast"
     echo "                              The quality of output video."
     echo "                              Default standard."
+    echo "  -v, --verbose               Show detailed log."
+    echo "  -v, --verbose_more          Show more detailed log."
     echo
 }
 
@@ -81,14 +82,11 @@ OPTIONS=''
 # Reset in case getopts has been used previously in the shell.
 OPTIND=1
 #while getopts "hvc:s:t:w:" opt; do
-while getopts "hv" opt; do
+while getopts "h" opt; do
     case ${opt} in
         h ) # process option h
             show_usage
             exit 0
-            ;;
-        v ) # process option v
-            OPTIONS="-v"
             ;;
         \? ) # invalid option
             echo

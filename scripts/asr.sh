@@ -5,7 +5,7 @@ SCRIPT_NAME=$(basename ${0})
 
 function show_usage {
     echo "Usage: ${SCRIPT_NAME} -h"
-    echo "       ${SCRIPT_NAME} [-v] [-i] video [asr options]"
+    echo "       ${SCRIPT_NAME} [-i] video [asr options]"
     echo "${SCRIPT_NAME} converts the speech of a video to text."
     echo "The text is saved in a srt file with a suffix '.srt'"
     echo "appended to the name of input video"
@@ -20,7 +20,6 @@ function show_usage {
     echo "  options:"
     echo "  -i           Enable network. By default network is disabled."
     echo "               '-i' must be specified when you need download AI model."
-    echo "  -v           Show more log."
     echo "  -h           Show this help info."
     echo
     echo "  asr options:"
@@ -53,6 +52,11 @@ function show_usage {
     echo "  -ks, --keep_source"
     echo "               if this option is specified, srt contains both original and translated"
     echo "               lanugages. if not specified, srt contains only the translated language."
+    echo "  -v, --verbose"
+    echo "               Show detailed log."
+    echo "  -vv, --verbose_more"
+    echo "               Show more detailed log."
+    echo
 }
 
 
@@ -69,7 +73,7 @@ OPTIONS=''
 
 # Reset in case getopts has been used previously in the shell.
 OPTIND=1
-while getopts "ihv" opt; do
+while getopts "ih" opt; do
     case ${opt} in
         h ) # process option h
             show_usage
@@ -77,9 +81,6 @@ while getopts "ihv" opt; do
             ;;
         i ) # process option i
             NET_ENABLED=true
-            ;;
-        v ) # process option v
-            OPTIONS='-v'
             ;;
         \? ) # invalid option
             echo
