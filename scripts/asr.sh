@@ -5,7 +5,7 @@ SCRIPT_NAME=$(basename ${0})
 
 function show_usage {
     echo "Usage: ${SCRIPT_NAME} -h"
-    echo "       ${SCRIPT_NAME} [-i] video [asr options]"
+    echo "       ${SCRIPT_NAME} [-i] [-g glossary_file] ... video [asr options]"
     echo "${SCRIPT_NAME} converts the speech of a video to text."
     echo "The text is saved in a srt file with a suffix '.srt'"
     echo "appended to the name of input video"
@@ -18,6 +18,9 @@ function show_usage {
     echo "               video with a name equaling to video's name + .srt suffix."
     echo
     echo "  options:"
+    echo "  -g <glossary_file>"
+    echo "               Specify glossary file for translation."
+    echo "               Use this option multiple times to specify multiple glossary files"
     echo "  -i           Enable network. By default network is disabled."
     echo "               '-i' must be specified when you need download AI model."
     echo "  -h           Show this help info."
@@ -69,12 +72,23 @@ fi
 
 MODEL_DIR=${ROOT_DIR}/models
 NET_ENABLED=false
-OPTIONS=''
+GLOSSARIES_DOCKER_MOUNT=''
+GLOSSARIES_OPT=''
 
 # Reset in case getopts has been used previously in the shell.
 OPTIND=1
-while getopts "ih" opt; do
+while getopts "g:hi" opt; do
     case ${opt} in
+        g ) # process option g
+            GLOSSARY_PATH=$(realpath ${OPTARG})
+            GLOSSARY_FILENAME=$(basename ${GLOSSARY_PATH})
+            GLOSSARIES_DOCKER_MOUNT="${GLOSSARIES_DOCKER_MOUNT} -v ${GLOSSARY_PATH}:/glossary/${GLOSSARY_FILENAME}:ro"
+            if [ -z "${GLOSSARIES_OPT}" ]; then
+                GLOSSARIES_OPT="-g /glossary/${GLOSSARY_FILENAME}"
+            else
+                GLOSSARIES_OPT="${GLOSSARIES_OPT},/glossary/${GLOSSARY_FILENAME}"
+            fi
+            ;;
         h ) # process option h
             show_usage
             exit 0
@@ -93,7 +107,7 @@ shift $((OPTIND-1))
 
 VIDEO=$(realpath ${1})
 shift
-OPTIONS="${OPTIONS} ${@}"
+OPTIONS=${@}
 
 VIDEO_NAME=$(basename ${VIDEO})
 VIDEO_DIR=$(dirname ${VIDEO})
@@ -112,5 +126,5 @@ if ${NET_ENABLED}; then
 fi
 
 cd ${ROOT_DIR}
-docker-compose -f docker/docker-compose.yml run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${SRT_FILE}:/output/${SRT_FILE_NAME} -v ${MODEL_DIR}:/models ${DOCER_SERVICE} /app/asr.py ${OPTIONS} /video/${VIDEO_NAME} /output
+docker-compose -f docker/docker-compose.yml run --rm -v ${VIDEO}:/video/${VIDEO_NAME}:ro -v ${SRT_FILE}:/output/${SRT_FILE_NAME} -v ${MODEL_DIR}:/models ${GLOSSARIES_DOCKER_MOUNT} ${DOCER_SERVICE} /app/asr.py ${OPTIONS} ${GLOSSARIES_OPT} /video/${VIDEO_NAME} /output
 cd ${CWD}

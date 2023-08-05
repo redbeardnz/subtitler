@@ -44,7 +44,7 @@ class NMT:
 
     # magics of source language
     MAGICS = {'en': 'zzz{loc}zzz', 'zh': '@{loc}@'}
-    MAGIC_REX = {'en': re.compile(r'zzz(\d+)zzz'), 'zh': re.compile(r'@(\d+)@')}
+    MAGIC_REX = {'en': re.compile(r'[zZ]+(\d+)[zZ]+'), 'zh': re.compile(r'@(\d+)@')}
     NONE_REX = re.compile(r'$^')
 
     def __init__(self,
@@ -58,6 +58,12 @@ class NMT:
         if glossaries is not None:
             if isinstance(glossaries, Path):
                 glossaries = [glossaries]
+            # concat to form below dataform
+            #    en        zh      ja
+            # 0  FDA  食品和药物管理局  食品医薬品局
+            # 1  COVID      新冠病毒    コビッド
+            # 2  DOJ       司法部
+            # 3  CIA     中央情报局
             self._glossary = concat([read_csv(f) for f in glossaries], ignore_index=True).fillna('')
         else:
             self._glossary = None
@@ -67,11 +73,16 @@ class NMT:
             nltk.download('punkt', download_dir=str(model_dir/'nltk_data'))
 
 
-    def translate(self, documents: Union[str, List[str]], target_lang: str):
+    def translate(self,
+                  documents: Union[str, List[str]],
+                  target_lang: str,
+                  source_lang: str = None,
+    ):
         if isinstance(documents, str):
             documents = [documents]
         encoded = self._encode_glossary(documents, target_lang=target_lang)
         translated = self._model.translate(documents=[text for _, text in encoded],
+                                           source_lang=source_lang,
                                            target_lang=target_lang,
                                            show_progress_bar=True)
         translated = list(zip([lang for lang, _ in encoded], translated))
@@ -79,13 +90,14 @@ class NMT:
         return documents
 
 
-    def _encode_glossary(self, documents: List[str], target_lang: str):
+    def _encode_glossary(self, documents: List[str], target_lang: str, source_lang: str = None):
         encoded_documents = []
         # if self._glossary is None or target_lang not in self._glossary.columns:
         #     return documents
         logging.info(f'encoding glossary, target_lang: {target_lang}')
         for text in documents:
-            source_lang = self._model.language_detection(text)
+            if source_lang is None:
+                source_lang = self._model.language_detection(text)
             if self._glossary is not None \
                and source_lang != target_lang \
                and source_lang in self._glossary.columns \
@@ -107,6 +119,7 @@ class NMT:
         for source_lang, text in documents:
             if self._glossary is not None and target_lang in self._glossary.columns:
                 rex = self.MAGIC_REX.get(source_lang, self.NONE_REX)
+                # rex.sub(func, 'This is the zzz1zzz reporting system and how many deaths were reported to zzz2zzz by year.')
                 text = rex.sub(partial(self._rex_replace, target_lang), text)
                 logging.debug(f'glossary decoded text: {text}')
             decoded_documents.append(text)
@@ -114,6 +127,7 @@ class NMT:
 
 
     def _rex_replace(self, target_lang: str, match):
+        # only be called on matched object
         return self._glossary[target_lang][int(match.group(1))]
 
 

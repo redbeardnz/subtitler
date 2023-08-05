@@ -27,14 +27,19 @@ def translation(transcription: dict,
                 model_translation: str,
                 model_dir: Path,
                 target_lang: str,
-                keep_source: bool
+                keep_source: bool,
+                glossaries: list = None,
 ):
-    if transcription["language"] == target_lang:
+    source_lang = transcription["language"]
+    logging.critical(f'debug source_lang {source_lang}')
+    if source_lang == target_lang:
         return transcription
     # load nmt model
-    model = nmt.NMT(model_name=model_translation, model_dir=model_dir)
+    model = nmt.NMT(model_name=model_translation,
+                    model_dir=model_dir,
+                    glossaries=glossaries)
     texts = [seg["text"] for seg in transcription["segments"]]
-    texts = model.translate(documents=texts, target_lang=target_lang)
+    texts = model.translate(documents=texts, source_lang=source_lang, target_lang=target_lang)
     for seg in transcription["segments"]:
         original_text = seg["text"].strip()
         translated_text = texts[seg["id"]].strip()
@@ -52,6 +57,10 @@ if __name__ == "__main__":
                         help="the video from which subtitle is retrieved")
     parser.add_argument("srt_dir", metavar="srt_dir",
                         help="the path of dir to save output subtitle file")
+    parser.add_argument("-g", "--glossary", nargs="?",
+                        type=lambda l : [Path(p) for p in l.split(',')],
+                        default=None,
+                        help="the glossary file list seperated by comma")
     parser.add_argument("-m", "--model", nargs="?",
                         choices=["tiny.en", "tiny", "base.en", "base", "small.en", "small",
                                  "medium.en", "medium", "large-v1", "large-v2", "large"],
@@ -116,7 +125,8 @@ if __name__ == "__main__":
                                     model_translation=args.model_translation,
                                     model_dir=args.model_dir.resolve()/'easynmt',
                                     target_lang=args.translate,
-                                    keep_source=args.keep_source)
+                                    keep_source=args.keep_source,
+                                    glossaries=args.glossary)
 
     srt_file = str(args.video) + '.srt'
     logging.debug(f"generating {Path(srt_file).name} ...")
