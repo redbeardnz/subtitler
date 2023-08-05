@@ -47,6 +47,7 @@ def translation(transcription: dict,
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate subtitle srt file from video.")
     parser.add_argument("video", metavar="video",
+                        type=Path,
                         help="the video from which subtitle is retrieved")
     parser.add_argument("srt_dir", metavar="srt_dir",
                         help="the path of dir to save output subtitle file")
@@ -102,17 +103,18 @@ if __name__ == "__main__":
                                download_root=str(args.model_dir.resolve()/'whisper'),
                                device=DEVICE)
 
-    logging.debug(f"transcribing {args.video} ...")
-    transcription = model.transcribe(audio=args.video, fp16=False)
+    logging.critical(f"transcribing {args.video.name} ...")
+    transcription = model.transcribe(audio=str(args.video), fp16=False, verbose=False)
 
     if args.translate is not None:
+        logging.critical(f"translating {args.video.name} ...")
         transcription = translation(transcription=transcription,
                                     model_translation=args.model_translation,
                                     model_dir=args.model_dir.resolve()/'easynmt',
                                     target_lang=args.translate,
                                     keep_source=args.keep_source)
 
-    srt_file = args.video + '.srt'
+    srt_file = str(args.video) + '.srt'
     logging.debug(f"generating {Path(srt_file).name} ...")
     writer = WriteSRT(args.srt_dir)
     writer(transcription, srt_file)

@@ -2,3 +2,4 @@ openai-whisper
 easynmt
 sacremoses
 pandas
+ffpb # to show ffmpeg progress bar

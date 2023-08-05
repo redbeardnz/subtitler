@@ -3,11 +3,9 @@
 import argparse
 import json
 import logging
-# from matplotlib import colors
 import os
 from pathlib import Path
 import subprocess
-import tempfile
 from time import perf_counter
 
 # from moviepy.editor import *
@@ -51,14 +49,14 @@ class Subtitle:
 
     # quality is ffmpeg crf. 0 lossless ~ 51 wrost
     _FFMPEG_QUALITY = {"standard": 23, "ultrahigh": 0, "high": 16, "fast": 31, "ultrafast": 51}
-    _FFMPEG_SDR = 'ffmpeg -y' \
+    _FFMPEG_SDR = 'ffpb -y' \
         ' -i {input_video_path}' \
         ' -vf "subtitles={srt_path}:force_style=\'{ass_style}\'"' \
         ' -crf {quality}' \
         ' {output_video_path}'
     # the tag hvc1 comes from
     # https://discussions.apple.com/thread/253813055?answerId=257147397022#257147397022
-    _FFMPEG_HDR = 'ffmpeg -y' \
+    _FFMPEG_HDR = 'ffpb -y' \
         ' -i {input_video_path}' \
         ' -vf "subtitles={srt_path}:force_style=\'{ass_style}\'"' \
         ' -crf {quality}' \
@@ -207,12 +205,12 @@ class Subtitle:
                                  output_video_path=file_path)
         logging.debug(cmd)
         try:
-            p = subprocess.run(cmd, shell=True, capture_output=True, check=True)
+            p = subprocess.run(cmd, shell=True, capture_output=False, check=True)
             return True
-        except subprocess.CalledProcessError as e:
-            msg = e.stderr.decode("utf-8").strip()
-            logging.error(f"ffmpeg returns {e.returncode}, console [{msg}]")
-            return False
+        # except subprocess.CalledProcessError as e:
+        #     msg = e.stderr.decode("utf-8").strip()
+        #     logging.error(f"ffmpeg returns {e.returncode}, console [{msg}]")
+        #     return False
         except Exception as e:
             logging.error(f"exception in ffmpeg. e={repr(e)}")
             return False
@@ -334,12 +332,13 @@ if __name__ == "__main__":
                         help="The quality of output video")
 
     parser.add_argument("-v", "--verbose", action="store_true", default=False)
+    parser.add_argument("-vv", "--verbose_more", action="store_true", default=False)
     args = parser.parse_args()
 
     if args.verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
-    else:
         logging.getLogger().setLevel(logging.INFO)
+    elif args.verbose_more:
+        logging.getLogger().setLevel(logging.DEBUG)
 
 
     start = perf_counter()
