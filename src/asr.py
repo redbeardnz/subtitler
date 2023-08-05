@@ -22,6 +22,27 @@ import nmt
 GREEN = '\33[32m'
 RESET = '\33[0m'
 
+def translation(transcription: dict,
+                model_translation: str,
+                model_dir: Path,
+                target_lang: str,
+                keep_source: bool
+):
+    if transcription["language"] == target_lang:
+        return transcription
+    # load nmt model
+    model = nmt.NMT(model_name=model_translation, model_dir=model_dir)
+    texts = [seg["text"] for seg in transcription["segments"]]
+    texts = model.translate(documents=texts, target_lang=target_lang)
+    for seg in transcription["segments"]:
+        original_text = seg["text"].strip()
+        translated_text = texts[seg["id"]].strip()
+        if keep_source:
+            seg["text"] = f'{translated_text}\n{original_text}'
+        else:
+            seg["text"] = translated_text
+    return transcription
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate subtitle srt file from video.")
@@ -67,12 +88,13 @@ if __name__ == "__main__":
     parser.add_argument("-ks", "--keep_source", action="store_true", default=False,
                         help="subtitle contain both original language and tranlated language")
     parser.add_argument("-v", "--verbose", action="store_true", default=False)
+    parser.add_argument("-vv", "--verbose_more", action="store_true", default=False)
     args = parser.parse_args()
 
     if args.verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
-    else:
         logging.getLogger().setLevel(logging.INFO)
+    elif args.verbose_more:
+        logging.getLogger().setLevel(logging.DEBUG)
 
     start = perf_counter()
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -84,11 +106,11 @@ if __name__ == "__main__":
     transcription = model.transcribe(audio=args.video, fp16=False)
 
     if args.translate is not None:
-        transcription = nmt.translation(transcription=transcription,
-                                        model_translation=args.model_translation,
-                                        model_dir=args.model_dir.resolve()/'easynmt',
-                                        target_lang=args.translate,
-                                        keep_source=args.keep_source)
+        transcription = translation(transcription=transcription,
+                                    model_translation=args.model_translation,
+                                    model_dir=args.model_dir.resolve()/'easynmt',
+                                    target_lang=args.translate,
+                                    keep_source=args.keep_source)
 
     srt_file = args.video + '.srt'
     logging.debug(f"generating {Path(srt_file).name} ...")
