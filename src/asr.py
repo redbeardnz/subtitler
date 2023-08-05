@@ -7,6 +7,7 @@ warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 
 
 import argparse
+import gc
 import logging
 from pathlib import Path
 import sys
@@ -105,6 +106,9 @@ if __name__ == "__main__":
 
     logging.critical(f"transcribing {args.video.name} ...")
     transcription = model.transcribe(audio=str(args.video), fp16=False, verbose=False)
+    del model
+    gc.collect()
+    torch.cuda.empty_cache()
 
     if args.translate is not None:
         logging.critical(f"translating {args.video.name} ...")
