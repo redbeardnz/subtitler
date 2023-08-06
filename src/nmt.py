@@ -44,7 +44,7 @@ class NMT:
 
     # magics of source language
     MAGICS = {'en': 'zzz{loc}zzz', 'zh': '@{loc}@'}
-    MAGIC_REX = {'en': re.compile(r'[zZ]+(\d+)[zZ]+'), 'zh': re.compile(r'@(\d+)@')}
+    MAGIC_REX = {'en': re.compile(r'[zZ]+(\d+)[zZ]+'), 'zh': re.compile(r'@[\s]*(\d+)[\s]*@')}
     NONE_REX = re.compile(r'$^')
 
     def __init__(self,
