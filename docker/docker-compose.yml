@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: subtitler:latest
+    image: subtitler:${release_num}
     container_name: subtitler
     restart: "no"
     volumes:
@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: subtitler:latest
+    image: subtitler:${release_num}
     container_name: subtitler
     restart: "no"
     volumes:
